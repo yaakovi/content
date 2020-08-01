@@ -139,7 +139,7 @@ references:
       name: Create Content Artifacts
       when: always
       command: |
-        demisto-sdk create-content-artifacts -a $CIRCLE_ARTIFACTS --cpus 8
+        demisto-sdk create-content-artifacts -a $CIRCLE_ARTIFACTS
         # create zip with contents of content_new.zip and content_test.zip for use in updating content on instances
         cp "$CIRCLE_ARTIFACTS/content_new.zip" "$CIRCLE_ARTIFACTS/all_content.zip"
         unzip -q "$CIRCLE_ARTIFACTS/content_test.zip" -d "test_content_dir"
@@ -433,7 +433,7 @@ jobs:
                   fi
   Create Instances:
     <<: *container_config
-    resource_class: large
+    resource_class: medium
     <<: *environment
     steps:
       - checkout
