@@ -139,6 +139,11 @@ references:
       name: Create Content Artifacts
       when: always
       command: |
+        if [ -n "${NIGHTLY}" ];
+          then
+            echo "Skipping - not running in INSTANCE_TESTS build"
+            exit 0
+        fi
         demisto-sdk create-content-artifacts -a $CIRCLE_ARTIFACTS
         # create zip with contents of content_new.zip and content_test.zip for use in updating content on instances
         cp "$CIRCLE_ARTIFACTS/content_new.zip" "$CIRCLE_ARTIFACTS/all_content.zip"
@@ -478,11 +483,21 @@ jobs:
                 name: Prepare Content Packs For Testing
                 when: always
                 command: |
+                  if [ -n "${NIGHTLY}" ];
+                    then
+                      echo "Skipping - not running in INSTANCE_TESTS build"
+                      exit 0
+                  fi
                   ./Tests/scripts/prepare_content_packs_for_testing.sh
                   echo "$CIRCLE_BUILD_NUM" > create_instances_build_num.txt  # so that later jobs in this workflow could configure the right path
             - run:
                 name: Zip Content Packs From GCS
                 command: |
+                  if [ -n "${NIGHTLY}" ];
+                    then
+                      echo "Skipping - not running in INSTANCE_TESTS build"
+                        exit 0
+                  fi
                   GCS_PATH=$(mktemp)
                   ZIP_FOLDER=$(mktemp -d)
                   echo $GCS_MARKET_KEY > $GCS_PATH
@@ -839,6 +854,11 @@ jobs:
             - run:
                 name: Upload Packs To Marketplace Storage
                 command: |
+                  if [ -n "${NIGHTLY}" ];
+                    then
+                      echo "Skipping - not running in INSTANCE_TESTS build"
+                      exit 0
+                  fi
                   if [[ $CIRCLE_BRANCH != master ]]; then
                     echo "Skipping packs uploading on non master branch"
                     exit 0
