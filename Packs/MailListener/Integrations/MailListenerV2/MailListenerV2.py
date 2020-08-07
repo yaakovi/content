@@ -7,7 +7,7 @@ from imap_tools import OR
 from imapclient import IMAPClient
 
 import demistomock as demisto
-from CommonServerPython import *  # noqa: E402 lgtm [py/polluting-import]
+from CommonServerPython import *
 
 
 class Email(object):
